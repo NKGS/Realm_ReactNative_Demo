@@ -10,17 +10,16 @@ import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
-  TouchableHighlight,
-  FlatList, 
-  SafeAreaView
+  TouchableHighlight
 } from 'react-native';
 
 import Realm from 'realm';
+import { TextInput, TouchableOpacity } from 'react-native-gesture-handler';
 
-const DetailsScreen = (({route, navigation}) => {
+const DetailsScreen = (({ route, navigation }) => {
 
   const [realm, setRealm] = useState(null)
-  const [notes, setNotes] = useState(null)
+  const [note, setNotes] = useState(route.params.data)
 
   const notesSchema = {
     name: 'notes',
@@ -32,49 +31,46 @@ const DetailsScreen = (({route, navigation}) => {
   }
   //api call
   useEffect(() => {
-
     Realm.open({
       path: 'NotesDatabase.realm',
       schema: [notesSchema],
     }).then(realm => {
       setRealm(realm)
-      var notes = realm.objects('notes');
-      console.log(notes)
-      setNotes(notes)
     })
-
   }, [])
 
-
-  const addNotes = () => {
-    realm.write(() => {
-      var ID = realm.objects('notes').sorted('id', true).length > 0
-        ? realm.objects('notes').sorted('id', true)[0]
-          .id + 1
-        : 1;
-      
-      realm.create('notes', {
-        id: ID,
-        title: 'Note ' + ID,
-        description: 'Welcome to my note number ' + ID
-      });
-      alert('Notes saved successfully');
-      var notes = realm.objects('notes');
-      setNotes(notes)
-      setRealm(realm)
+  const onChangeText = (val) => {
+    console.log(note)
+    setNotes({
+      id: note.id,
+      title: note.title,
+      description: val
     })
-    // })
   }
 
-  const ListViewItemSeparator = () => {
-    return (
-      <View style={{ height: 1, width: '100%', backgroundColor: '#000' }} />
-    );
-  };
+  const saveData = () => {
+    let updt = realm.objects('notes');
+
+
+    realm.write(() => {
+      updt[route.params.index].description = note.description;
+    });
+  }
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', borderWidth: 1, borderColor: 'red' }}>
-      <Text>{route.params.data.description}</Text>    
+    <View style={{ flex: 1, alignItems: 'center' }}>
+      <TextInput
+        style={{ height: '80%', borderColor: 'gray', borderWidth: 1, width: '90%', margin: 10, color: 'black' }}
+        onChangeText={text => onChangeText(text)}
+        multiline
+        numberOfLines={30}
+        value={note.description}
+      />
+      <View>
+        <TouchableOpacity onPress={()=> saveData()} style={{ backgroundColor: 'darkblue', minWidth: '90%', alignItems: 'center', height: 40, justifyContent: 'center' }}>
+          <Text style={{ color: 'white' }}>Save</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 })

@@ -72,8 +72,8 @@ const HomeScreen = (({navigation}) => {
     );
   };
 
-  const gotoDetailsScreen = (item) => {
-    navigation.push('Details', { data: item })
+  const gotoDetailsScreen = (item, index) => {
+    navigation.push('Details', { data: item, index: index })
   }
 
   return (
@@ -89,8 +89,8 @@ const HomeScreen = (({navigation}) => {
           ItemSeparatorComponent={ListViewItemSeparator}
           keyExtractor={(item, index) => index.toString()}
           data={notes}
-          renderItem={({ item }) => (
-            <TouchableWithoutFeedback onPress={() => gotoDetailsScreen(item)} style={{ backgroundColor: 'white', padding: 20, flex: 1 }}>
+          renderItem={({ item, index }) => (
+            <TouchableWithoutFeedback onPress={() => gotoDetailsScreen(item, index)} style={{ backgroundColor: 'white', padding: 20, flex: 1 }}>
               <Text>Title: {item.title}</Text>
             </TouchableWithoutFeedback>
           )}
