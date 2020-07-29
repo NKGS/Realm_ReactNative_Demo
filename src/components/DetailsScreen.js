@@ -40,7 +40,6 @@ const DetailsScreen = (({ route, navigation }) => {
   }, [])
 
   const onChangeText = (val) => {
-    console.log(note)
     setNotes({
       id: note.id,
       title: note.title,
