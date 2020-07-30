@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "842588912872",
+    "firebase_url": "https://realmdemo-482c1.firebaseio.com",
+    "project_id": "realmdemo-482c1",
+    "storage_bucket": "realmdemo-482c1.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:842588912872:android:0ec85a1ec1bec33d3ddd5d",
+        "android_client_info": {
+          "package_name": "com.realmdemo"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "842588912872-gvgnrqu9cjv355mvc2vi60r4o65b471p.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBkt6Fc8TqS2jNRf_aj_eo3fcRqT8ifAF0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "842588912872-gvgnrqu9cjv355mvc2vi60r4o65b471p.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

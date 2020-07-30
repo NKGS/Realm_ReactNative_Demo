@@ -31,12 +31,20 @@ const DetailsScreen = (({ route, navigation }) => {
   }
   //api call
   useEffect(() => {
+    const abortController = new AbortController()
+    const signal = abortController.signal
+
     Realm.open({
       path: 'NotesDatabase.realm',
       schema: [notesSchema],
+      signal: signal
     }).then(realm => {
       setRealm(realm)
     })
+
+    return function cleanup() {
+      abortController.abort();
+    }
   }, [])
 
   const onChangeText = (val) => {

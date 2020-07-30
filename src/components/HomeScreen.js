@@ -18,6 +18,7 @@ import Realm from 'realm';
 import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 import { StackActions } from '@react-navigation/core';
 import SwipeListData from './SwipeListData';
+import database from '@react-native-firebase/database';
 
 const HomeScreen = (({ navigation }) => {
 
@@ -32,12 +33,16 @@ const HomeScreen = (({ navigation }) => {
       description: 'string'
     },
   }
+
   //api call
   useEffect(() => {
+    const abortController = new AbortController()
+    const signal = abortController.signal
 
     Realm.open({
       path: 'NotesDatabase.realm',
       schema: [notesSchema],
+      signal: signal
     }).then(realm => {
       setRealm(realm)
       var notes = realm.objects('notes');
@@ -48,6 +53,19 @@ const HomeScreen = (({ navigation }) => {
       setNotes(notesVal)
     })
 
+
+    const onValueChange = database()
+      .ref(`/notes/abc`)
+      .on('value', snapshot => {
+        console.log('Snapshot data onValueChange: ', snapshot.val());
+      });
+
+    return function cleanup() {
+      abortController.abort();
+      database()
+        .ref(`/notes/abc`)
+        .off('value', onValueChange);
+    }
   }, [])
 
 
@@ -69,6 +87,15 @@ const HomeScreen = (({ navigation }) => {
         notesVal[index].key = String(index)
       });
 
+
+      database()
+        .ref('/notes/abc')
+        .set({
+          id: ID,
+          title: 'Note ' + ID,
+          description: 'Welcome to my note number ' + ID
+        })
+        .then(() => console.log('Data set saveddd.'));
       setNotes(notesVal)
       setRealm(realm)
     })
@@ -99,7 +126,7 @@ const HomeScreen = (({ navigation }) => {
         setNotes(notesVal)
       }
     });
-    
+
   }
 
   return (
