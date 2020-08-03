@@ -19,20 +19,12 @@ import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture
 import { StackActions } from '@react-navigation/core';
 import SwipeListData from './SwipeListData';
 import database from '@react-native-firebase/database';
+import { notesSchema } from '../util/Constants';
 
 const HomeScreen = (({ navigation }) => {
 
   const [realm, setRealm] = useState(null)
   const [notes, setNotes] = useState(null)
-
-  const notesSchema = {
-    name: 'notes',
-    properties: {
-      id: { type: 'int', default: 0 },
-      title: 'string',
-      description: 'string'
-    },
-  }
 
   //api call
   useEffect(() => {
@@ -57,7 +49,7 @@ const HomeScreen = (({ navigation }) => {
     const onValueChange = database()
       .ref(`/notes/abc`)
       .on('value', snapshot => {
-        console.log('Snapshot data onValueChange: ', snapshot.val());
+        //console.log('Snapshot data onValueChange: ', snapshot.val());
       });
 
     return function cleanup() {
@@ -83,19 +75,16 @@ const HomeScreen = (({ navigation }) => {
       });
       var notes = realm.objects('notes');
       let notesVal = [...notes]
+      let data = []
       let notesVa = notes.map((val, index) => {
         notesVal[index].key = String(index)
+        data.push(val)
       });
-
-
-      database()
-        .ref('/notes/abc')
-        .set({
-          id: ID,
-          title: 'Note ' + ID,
-          description: 'Welcome to my note number ' + ID
-        })
-        .then(() => console.log('Data set saveddd.'));
+      
+      // database()
+      //   .ref('/notes/abc')
+      //   .set({data})
+      //   .then(() => console.log('Data set saveddd.'));
       setNotes(notesVal)
       setRealm(realm)
     })
